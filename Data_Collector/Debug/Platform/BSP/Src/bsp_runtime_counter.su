@@ -1,3 +1,0 @@
-../Platform/BSP/Src/bsp_runtime_counter.c:12:9:BspRuntimeCounter_Init	8	static
-../Platform/BSP/Src/bsp_runtime_counter.c:28:10:BspRuntimeCounter_Get	4	static
-../Platform/BSP/Src/bsp_runtime_counter.c:33:9:BspRuntimeCounter_IsEnabled	4	static

@@ -1,3 +1,0 @@
-../Platform/Services/Logging/Src/svc_log.c:6:6:svc_log_init	4	static
-../Platform/Services/Logging/Src/svc_log.c:11:20:lvl_str	16	static
-../Platform/Services/Logging/Src/svc_log.c:21:6:svc_log	292	static

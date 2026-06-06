@@ -1,3 +1,0 @@
-../Platform/Application/task_monitoring/Src/task_monitoring.c:20:13:Monitor_CheckHeap	5
-../Platform/Application/task_monitoring/Src/task_monitoring.c:45:13:Monitor_CheckStack	5
-../Platform/Application/task_monitoring/Src/task_monitoring.c:72:6:MonitorTask	6

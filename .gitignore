@@ -1,0 +1,24 @@
+# STM32CubeIDE workspace metadata
+.metadata/
+
+# Eclipse/STM32CubeIDE per-project metadata
+**/.settings/
+*.launch
+
+# Generated build directories
+**/Debug/
+**/Release/
+
+# Common generated artifacts
+*.o
+*.d
+*.su
+*.cyclo
+*.elf
+*.map
+*.list
+*.bin
+*.hex
+objects.list
+objects.mk
+sources.mk
