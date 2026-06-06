@@ -1,0 +1,10 @@
+../Platform/Services/Monitoring/Src/svc_monitoring.c:6:9:SvcMonitoring_InitRuntimeCounter	8	static
+../Platform/Services/Monitoring/Src/svc_monitoring.c:11:10:SvcMonitoring_GetRuntimeCounter	8	static
+../Platform/Services/Monitoring/Src/svc_monitoring.c:16:9:SvcMonitoring_IsRuntimeCounterEnabled	8	static
+../Platform/Services/Monitoring/Src/svc_monitoring.c:21:10:SvcMonitoring_GetFreeHeapBytes	8	static
+../Platform/Services/Monitoring/Src/svc_monitoring.c:26:10:SvcMonitoring_GetMinEverFreeHeapBytes	8	static
+../Platform/Services/Monitoring/Src/svc_monitoring.c:31:10:SvcMonitoring_GetCurrentTaskWatermarkWords	8	static
+../Platform/Services/Monitoring/Src/svc_monitoring.c:36:10:SvcMonitoring_GetCurrentTaskWatermarkBytes	8	static
+../Platform/Services/Monitoring/Src/svc_monitoring.c:41:10:SvcMonitoring_GetTaskWatermarkWords	16	static
+../Platform/Services/Monitoring/Src/svc_monitoring.c:51:10:SvcMonitoring_GetTaskWatermarkBytes	16	static
+../Platform/Services/Monitoring/Src/svc_monitoring.c:57:9:SvcMonitoring_GetTaskStackInfo	32	static

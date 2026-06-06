@@ -1,0 +1,3 @@
+../Platform/Application/task_monitoring/Src/task_monitoring.c:20:13:Monitor_CheckHeap	16	static
+../Platform/Application/task_monitoring/Src/task_monitoring.c:45:13:Monitor_CheckStack	32	static
+../Platform/Application/task_monitoring/Src/task_monitoring.c:72:6:MonitorTask	592	static

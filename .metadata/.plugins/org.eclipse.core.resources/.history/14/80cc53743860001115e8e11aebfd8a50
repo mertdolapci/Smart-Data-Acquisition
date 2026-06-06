@@ -1,0 +1,42 @@
+#include "task_monitoring.h"
+#include "svc_log.h"
+#include "cmsis_os2.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
+
+extern osThreadId_t AppControlTaskHandle;
+
+
+void MonitorTask(void *argument)
+{
+    (void)argument;
+
+    LOGI("MonitorTask started");
+
+    for (;;)
+    {
+    	size_t FreeHeapSize = xPortGetFreeHeapSize();
+    	size_t MinHeapSize = xPortGetMinimumEverFreeHeapSize();
+
+    	LOGI("Heap free=%lu minEver=%lu bytes", (uint32_t)FreeHeapSize, (uint32_t)MinHeapSize);
+
+    	UBaseType_t monitor_wm = uxTaskGetStackHighWaterMark(NULL);
+    	LOGI("Monitor Stack WM : %lu words", (uint32_t)monitor_wm);
+
+    	if (AppControlTaskHandle != NULL)
+    	{
+    		UBaseType_t app_wm = uxTaskGetStackHighWaterMark((TaskHandle_t)AppControlTaskHandle);
+        	LOGI("AppCtrl Stack WM : %lu words", (uint32_t)app_wm);
+
+    	}
+    	else
+    	{
+    	    LOGW("AppControlTaskHandle is NULL");
+    	}
+
+
+        osDelay(5000);
+        LOGI("Monitor tick");
+    }
+}

@@ -1,0 +1,162 @@
+#include "task_monitoring.h"
+#include "task_monitoring_cfg.h"
+#include "cmsis_os2.h"
+#include "svc_log.h"
+#include "svc_monitoring.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
+extern osThreadId_t AppControlTaskHandle;
+
+typedef struct
+{
+    const char* name;
+    void* handle;
+    uint32_t total_stack_words;
+    uint8_t is_current_task;
+} monitored_task_t;
+
+
+static void Monitor_CheckHeap(uint32_t free_heap, uint32_t min_heap)
+{
+    LOGI("Heap free=%lu minEver=%lu bytes",
+         free_heap,
+         min_heap);
+
+    if (free_heap < HEAP_CRITICAL_THRESHOLD_BYTES)
+    {
+        LOGE("Heap critical! free=%lu bytes", free_heap);
+    }
+    else if (free_heap < HEAP_WARN_THRESHOLD_BYTES)
+    {
+        LOGW("Heap warning! free=%lu bytes", free_heap);
+    }
+
+    if (min_heap < HEAP_CRITICAL_THRESHOLD_BYTES)
+    {
+        LOGE("Heap minEver critical! minEver=%lu bytes", min_heap);
+    }
+    else if (min_heap < HEAP_WARN_THRESHOLD_BYTES)
+    {
+        LOGW("Heap minEver warning! minEver=%lu bytes", min_heap);
+    }
+}
+
+static void Monitor_CheckStack(
+    const char* task_name,
+    const svc_task_stack_info_t* stack)
+{
+    if ((task_name == NULL) || (stack == NULL))
+    {
+        return;
+    }
+
+    LOGI("%s stack total=%lu usedMax=%lu freeMin=%lu usage=%lu%%",
+         task_name,
+         stack->total_words,
+         stack->max_used_words,
+         stack->min_free_words,
+         stack->usage_percent);
+
+    if (stack->min_free_words < STACK_CRITICAL_THRESHOLD_WORDS)
+    {
+        LOGE("%s stack critical!", task_name);
+    }
+    else if (stack->min_free_words < STACK_WARN_THRESHOLD_WORDS)
+    {
+        LOGW("%s stack warning!", task_name);
+    }
+}
+
+extern volatile uint32_t g_eth_rx_count;
+extern volatile uint32_t g_eth_arp_rx_count;
+extern volatile uint32_t g_eth_ipv4_rx_count;
+extern volatile uint32_t g_eth_input_ok;
+extern volatile uint32_t g_eth_input_err;
+extern volatile int32_t  g_eth_last_err;
+
+extern volatile uint32_t g_eth_tx_count;
+extern volatile uint32_t g_eth_tx_arp_count;
+extern volatile uint32_t g_eth_tx_ipv4_count;
+extern volatile uint32_t g_eth_tx_icmp_like_count;
+extern volatile int32_t  g_eth_tx_last_err;
+
+void MonitorTask(void *argument)
+{
+    (void)argument;
+
+    LOGI("MonitorTask started");
+
+    for (;;)
+    {
+    	char stats_buf[512];
+
+    	vTaskGetRunTimeStats(stats_buf);
+    	LOGI("\r\nTask Runtime Stats:\r\n%s", stats_buf);
+
+        uint32_t free_heap =
+            SvcMonitoring_GetFreeHeapBytes();
+
+        uint32_t min_heap =
+            SvcMonitoring_GetMinEverFreeHeapBytes();
+
+        Monitor_CheckHeap(free_heap, min_heap);
+
+        monitored_task_t tasks[] =
+        {
+            {
+                .name = "App Manager",
+                .handle = (void*)AppControlTaskHandle,
+                .total_stack_words = APP_CONTROL_STACK_WORDS,
+                .is_current_task = 0u
+            },
+            {
+                .name = "Task Monitoring",
+                .handle = NULL,
+                .total_stack_words = MONITOR_STACK_WORDS,
+                .is_current_task = 1u
+            }
+        };
+
+        for (uint32_t i = 0; i < (sizeof(tasks) / sizeof(tasks[0])); i++)
+        {
+            if ((tasks[i].is_current_task == 0u) &&
+                (tasks[i].handle == NULL))
+            {
+                LOGW("%s task handle is NULL", tasks[i].name);
+                continue;
+            }
+
+            svc_task_stack_info_t stack = {0};
+
+            void* handle =
+                tasks[i].is_current_task ? NULL : tasks[i].handle;
+
+            if (SvcMonitoring_GetTaskStackInfo(
+                    handle,
+                    tasks[i].total_stack_words,
+                    &stack))
+            {
+                Monitor_CheckStack(tasks[i].name, &stack);
+            }
+        }
+
+        LOGI("ETH rx=%lu arp=%lu ipv4=%lu input_ok=%lu input_err=%lu last_err=%ld",
+             g_eth_rx_count,
+             g_eth_arp_rx_count,
+             g_eth_ipv4_rx_count,
+             g_eth_input_ok,
+             g_eth_input_err,
+             g_eth_last_err);
+        osDelay(MONITOR_PERIOD_MS);
+
+        LOGI("ETH tx=%lu tx_arp=%lu tx_ipv4=%lu tx_icmp=%lu tx_err=%ld",
+             g_eth_tx_count,
+             g_eth_tx_arp_count,
+             g_eth_tx_ipv4_count,
+             g_eth_tx_icmp_like_count,
+             g_eth_tx_last_err);
+    }
+
+
+}

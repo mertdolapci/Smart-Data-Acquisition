@@ -1,0 +1,23 @@
+#pragma once
+
+#include <stdint.h>
+
+typedef struct
+{
+    uint32_t total_words;
+    uint32_t min_free_words;
+    uint32_t max_used_words;
+    uint32_t usage_percent;
+} svc_task_stack_info_t;
+
+
+uint8_t SvcMonitoring_GetTaskStackInfo(void* taskHandle, uint32_t totalStackWords, svc_task_stack_info_t* info);
+
+uint32_t SvcMonitoring_GetFreeHeapBytes(void);
+uint32_t SvcMonitoring_GetMinEverFreeHeapBytes(void);
+
+uint32_t SvcMonitoring_GetCurrentTaskWatermarkWords(void);
+uint32_t SvcMonitoring_GetCurrentTaskWatermarkBytes(void);
+
+uint32_t SvcMonitoring_GetTaskWatermarkWords(void* taskHandle);
+uint32_t SvcMonitoring_GetTaskWatermarkBytes(void* taskHandle);

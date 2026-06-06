@@ -1,0 +1,53 @@
+#include "app_control.h"
+#include "app_types.h"
+#include "svc_log.h"
+#include "bsp_led.h"
+#include "cmsis_os2.h"
+
+static void app_init_sequence(void)
+{
+    bsp_led_init();
+    svc_log_init();
+    LOGI("App init sequence start");
+    // İleride burada:
+    // - RTC init check
+    // - FRAM/flash queue init
+    // - Network init check
+    LOGI("App init sequence done");
+}
+
+void AppControlTask(void *argument)
+{
+    (void)argument;
+
+    app_state_t st = APP_ST_INIT;
+
+    LOGI("AppControlTask started");
+
+    uint32_t alive_cnt = 0;
+
+    for (;;)
+    {
+        switch (st)
+        {
+        case APP_ST_INIT:
+            app_init_sequence();
+            st = APP_ST_RUNNING;
+            break;
+
+        case APP_ST_RUNNING:
+            bsp_led_toggle();
+            LOGI("Alive %lu", (unsigned long)alive_cnt++);
+            osDelay(1000); // demo heartbeat
+            break;
+
+        case APP_ST_ERROR:
+        default:
+            LOGE("APP_ST_ERROR");
+            // Basit recovery: bekle ve tekrar INIT'e dön (istersen burada kalabilir)
+            osDelay(1000);
+            st = APP_ST_INIT;
+            break;
+        }
+    }
+}

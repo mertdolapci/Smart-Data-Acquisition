@@ -1,0 +1,4 @@
+../Platform/Application/app_ctrl/Src/app_control.c:17:20:app_state_init	8	static
+../Platform/Application/app_ctrl/Src/app_control.c:29:20:app_state_running	40	static
+../Platform/Application/app_ctrl/Src/app_control.c:85:20:app_state_error	8	static
+../Platform/Application/app_ctrl/Src/app_control.c:94:6:AppControlTask	24	static

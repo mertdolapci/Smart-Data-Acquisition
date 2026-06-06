@@ -1,0 +1,4 @@
+../Platform/Application/app_ctrl/Src/app_control.c:17:20:app_state_init	1
+../Platform/Application/app_ctrl/Src/app_control.c:29:20:app_state_running	5
+../Platform/Application/app_ctrl/Src/app_control.c:85:20:app_state_error	1
+../Platform/Application/app_ctrl/Src/app_control.c:94:6:AppControlTask	3

@@ -1,0 +1,6 @@
+#pragma once
+
+#include <stdint.h>
+
+void BspRuntimeCounter_Init(void);
+uint32_t BspRuntimeCounter_Get(void);

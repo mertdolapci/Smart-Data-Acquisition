@@ -1,0 +1,52 @@
+#include "task_monitoring.h"
+
+#include "cmsis_os2.h"
+#include "svc_log.h"
+#include "svc_monitoring.h"
+
+extern osThreadId_t AppControlTaskHandle;
+
+void MonitorTask(void *argument)
+{
+    (void)argument;
+
+    LOGI("MonitorTask started");
+
+    for (;;)
+    {
+        uint32_t free_heap =
+            SvcMonitoring_GetFreeHeapBytes();
+
+        uint32_t min_heap =
+            SvcMonitoring_GetMinEverFreeHeapBytes();
+
+        uint32_t monitor_wm =
+            SvcMonitoring_GetCurrentTaskWatermarkWords();
+
+        uint32_t app_wm = 0u;
+
+        if (AppControlTaskHandle != NULL)
+        {
+            app_wm =
+                SvcMonitoring_GetTaskWatermarkWords(
+                    (void*)AppControlTaskHandle);
+        }
+        else
+        {
+            LOGW("AppControlTaskHandle is NULL");
+        }
+
+        LOGI("Heap free=%lu minEver=%lu bytes",
+             free_heap,
+             min_heap);
+
+        LOGI("Monitor Stack WM : %lu words",
+             monitor_wm);
+
+        LOGI("AppCtrl Stack WM : %lu words",
+             app_wm);
+
+        osDelay(5000);
+        LOGI("Monitor tick");
+    }
+}

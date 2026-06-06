@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="hasShownOverlayPopupBefore" value="true"/>
+	<item key="replaceBarOpen" value="false"/>
+	<list key="searchhistory">
+		<item value="GPIO_Port"/>
+		<item value="LD1_GPIO_Port"/>
+		<item value="AppControlTask"/>
+		<item value="TIMEOUT"/>
+		<item value="UART"/>
+		<item value="UART_Send"/>
+		<item value="HAL_GPIO_TogglePin"/>
+		<item value="LCD_FB_START_ADDRESS"/>
+		<item value="FMC_Bank5_6_R_BASE"/>
+		<item value="FMC_Bank5_6_TypeDef"/>
+		<item value="TIM_HandleTypeDef"/>
+		<item value="HAL_TIM_PeriodElapsedCallback"/>
+		<item value="haudio_tim"/>
+		<item value="HAL_TIM_MspPostInit"/>
+		<item value="HAL_InitTick"/>
+	</list>
+</section>

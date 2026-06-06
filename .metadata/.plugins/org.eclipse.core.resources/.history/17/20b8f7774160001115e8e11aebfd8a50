@@ -1,0 +1,90 @@
+#include "task_monitoring.h"
+#include "task_monitoring_cfg.h"
+#include "cmsis_os2.h"
+#include "svc_log.h"
+#include "svc_monitoring.h"
+
+extern osThreadId_t AppControlTaskHandle;
+
+void MonitorTask(void *argument)
+{
+    (void)argument;
+
+    LOGI("MonitorTask started");
+
+    for (;;)
+    {
+        uint32_t free_heap =
+            SvcMonitoring_GetFreeHeapBytes();
+
+        uint32_t min_heap =
+            SvcMonitoring_GetMinEverFreeHeapBytes();
+
+        svc_task_stack_info_t app_stack = {0};
+        svc_task_stack_info_t mon_stack = {0};
+
+        uint8_t app_ok = 0u;
+
+        if (AppControlTaskHandle != NULL)
+        {
+            app_ok =
+                SvcMonitoring_GetTaskStackInfo(
+                    (void*)AppControlTaskHandle,
+                    APP_CONTROL_STACK_WORDS,
+                    &app_stack);
+        }
+        else
+        {
+            LOGW("AppControlTaskHandle is NULL");
+        }
+
+        uint8_t mon_ok =
+            SvcMonitoring_GetTaskStackInfo(
+                NULL,
+                MONITOR_STACK_WORDS,
+                &mon_stack);
+
+        LOGI("Heap free=%lu minEver=%lu bytes",
+             free_heap,
+             min_heap);
+
+        if (app_ok)
+        {
+            LOGI("APP stack total=%lu usedMax=%lu freeMin=%lu usage=%lu%%",
+                 app_stack.total_words,
+                 app_stack.max_used_words,
+                 app_stack.min_free_words,
+                 app_stack.usage_percent);
+
+            if (app_stack.min_free_words < STACK_CRITICAL_THRESHOLD_WORDS)
+            {
+                LOGE("APP stack critical!");
+            }
+            else if (app_stack.min_free_words < STACK_WARN_THRESHOLD_WORDS)
+            {
+                LOGW("APP stack warning!");
+            }
+        }
+
+        if (mon_ok)
+        {
+            LOGI("MON stack total=%lu usedMax=%lu freeMin=%lu usage=%lu%%",
+                 mon_stack.total_words,
+                 mon_stack.max_used_words,
+                 mon_stack.min_free_words,
+                 mon_stack.usage_percent);
+
+            if (mon_stack.min_free_words < STACK_CRITICAL_THRESHOLD_WORDS)
+            {
+                LOGE("MON stack critical!");
+            }
+            else if (mon_stack.min_free_words < STACK_WARN_THRESHOLD_WORDS)
+            {
+                LOGW("MON stack warning!");
+            }
+        }
+
+        osDelay(5000);
+        LOGI("Monitor tick");
+    }
+}

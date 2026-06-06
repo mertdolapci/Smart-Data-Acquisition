@@ -1,0 +1,23 @@
+#include "task_monitoring.h"
+#include "svc_log.h"
+#include "cmsis_os2.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
+void MonitorTask(void *argument)
+{
+    (void)argument;
+
+    LOGI("MonitorTask started");
+
+    for (;;)
+    {
+    	xPortGetFreeHeapSize()
+    	xPortGetMinimumEverFreeHeapSize()
+    	uxTaskGetStackHighWaterMark()
+        // Şimdilik sadece periyodik log
+        // İleride: heap/stack watermark, watchdog feed
+        osDelay(5000);
+        LOGI("Monitor tick");
+    }
+}

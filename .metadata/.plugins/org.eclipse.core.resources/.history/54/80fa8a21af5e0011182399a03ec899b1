@@ -1,0 +1,36 @@
+#include "app_control.h"
+#include "app_types.h"
+#include "svc_log.h"
+#include "bsp_led.h"
+#include "cmsis_os2.h"
+
+
+static app_state_t app_state_init(void);
+static app_state_t app_state_running(void);
+static app_state_t app_state_error(void);
+
+void AppControlTask(void *argument)
+{
+    (void)argument;
+
+    app_state_t state = APP_ST_INIT;
+
+    for (;;)
+    {
+        switch (state)
+        {
+        case APP_ST_INIT:
+            state = app_state_init();
+            break;
+
+        case APP_ST_RUNNING:
+            state = app_state_running();
+            break;
+
+        case APP_ST_ERROR:
+        default:
+            state = app_state_error();
+            break;
+        }
+    }
+}

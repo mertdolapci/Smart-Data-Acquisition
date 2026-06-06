@@ -1,0 +1,39 @@
+#include "svc_monitoring.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
+
+uint32_t SvcMonitoring_GetFreeHeapBytes(void)
+{
+    return (uint32_t)xPortGetFreeHeapSize();
+}
+
+uint32_t SvcMonitoring_GetMinEverFreeHeapBytes(void)
+{
+    return (uint32_t)xPortGetMinimumEverFreeHeapSize();
+}
+
+uint32_t SvcMonitoring_GetCurrentTaskWatermarkWords(void)
+{
+    return (uint32_t)uxTaskGetStackHighWaterMark(NULL);
+}
+
+uint32_t SvcMonitoring_GetCurrentTaskWatermarkBytes(void)
+{
+    return SvcMonitoring_GetCurrentTaskWatermarkWords() * sizeof(StackType_t);
+}
+
+uint32_t SvcMonitoring_GetTaskWatermarkWords(void* taskHandle)
+{
+    if (taskHandle == NULL)
+    {
+        return 0u;
+    }
+
+    return (uint32_t)uxTaskGetStackHighWaterMark((TaskHandle_t)taskHandle);
+}
+
+uint32_t SvcMonitoring_GetTaskWatermarkBytes(void* taskHandle)
+{
+    return SvcMonitoring_GetTaskWatermarkWords(taskHandle) * sizeof(StackType_t);
+}

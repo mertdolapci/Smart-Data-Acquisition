@@ -1,0 +1,16 @@
+#pragma once
+#include <stdarg.h>
+
+typedef enum {
+    LOG_LVL_INFO = 0,
+    LOG_LVL_WARN,
+    LOG_LVL_ERR,
+} log_level_t;
+
+void svc_log_init(void);
+void svc_log(log_level_t lvl, const char* fmt, ...);
+
+
+#define LOGI(...) svc_log(LOG_LVL_INFO, __VA_ARGS__)
+#define LOGW(...) svc_log(LOG_LVL_WARN, __VA_ARGS__)
+#define LOGE(...) svc_log(LOG_LVL_ERR,  __VA_ARGS__)
