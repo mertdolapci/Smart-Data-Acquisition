@@ -43,7 +43,7 @@ What is still placeholder or partially implemented:
 - measurement buffering and queueing
 - application-level data packaging
 - remote data upload, such as HTTP or another protocol
-- production-grade fault handling and recovery policies
+- fault handling and recovery policies
 
 ## Planned Development Stages
 
@@ -64,7 +64,7 @@ The expected next stages are:
 5. Reliability and diagnostics
 	Improve error recovery, watchdog integration, link supervision, and runtime observability.
 
-6. Production hardening
+6. hardening
 	Finalize configuration management, persistent settings if needed, and deployment-ready behavior.
 
 7. Edge AI integration
@@ -106,6 +106,6 @@ flowchart TD
 
 The current focus is to keep the firmware base stable, portable, and easy to build from STM32CubeIDE while preparing the application architecture for real data acquisition features.
 
-In short, the project is no longer just a blank MCU template, but it is not yet a complete end-to-end data collection product. It is in the transition phase between platform bring-up and application feature development.
+In short, the project is no longer just a blank MCU template, but it is not yet a complete end-to-end data collection. It is in the transition phase between platform bring-up and application feature development.
 
-The long-term product direction will include edge intelligence as part of the data processing pipeline.
+The long-term direction will include edge intelligence as part of the data processing pipeline.
