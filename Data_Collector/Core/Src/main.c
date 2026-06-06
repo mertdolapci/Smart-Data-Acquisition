@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "crc.h"
 #include "lwip.h"
 #include "tim.h"
 #include "usart.h"
@@ -99,6 +100,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   MX_TIM2_Init();
+  MX_CRC_Init();
   /* USER CODE BEGIN 2 */
   printf("[INIT] STM32F746G Initilization...\r\n");
 
