@@ -4,11 +4,6 @@
 #include "bsp_led.h"
 #include "cmsis_os2.h"
 
-#include "lwip.h"
-#include "lwip/netif.h"
-#include "lwip/ip4_addr.h"
-extern struct netif gnetif;
-
 
 static app_state_t app_state_init(void);
 static app_state_t app_state_running(void);
@@ -42,27 +37,7 @@ static app_state_t app_state_running(void)
         last_measure_tick = now;
 
         LOGI("MEASURE tick");
-        LOGI("IP      : %s", ip4addr_ntoa(netif_ip4_addr(&gnetif)));
-        LOGI("NETMASK : %s", ip4addr_ntoa(netif_ip4_netmask(&gnetif)));
-        LOGI("GW      : %s", ip4addr_ntoa(netif_ip4_gw(&gnetif)));
-
-        LOGI("Link    : %s",
-             netif_is_link_up(&gnetif) ? "UP" : "DOWN");
-
-        LOGI("NetIf   : %s",
-             netif_is_up(&gnetif) ? "UP" : "DOWN");
-
-        LOGI("Flags = 0x%04X", gnetif.flags);
-
-        LOGI("HWADDR=%02X:%02X:%02X:%02X:%02X:%02X",
-             gnetif.hwaddr[0],
-             gnetif.hwaddr[1],
-             gnetif.hwaddr[2],
-             gnetif.hwaddr[3],
-             gnetif.hwaddr[4],
-             gnetif.hwaddr[5]);
-
-        // Adım-4:
+        // TODO:
         // svc_sensor_read(&data);
         // svc_queue_push(&data);
     }

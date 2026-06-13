@@ -1,7 +1,14 @@
 #pragma once
 
-#define APP_CONTROL_STACK_WORDS        (1536u)
-#define MONITOR_STACK_WORDS            (512u)
+/*
+ * Central list of tasks observed by MonitorTask.
+ * Add/remove items here without touching task_monitoring.c.
+ *
+ * Args: X(displayName, taskHandleSymbol, taskAttrSymbol, isCurrentTask)
+ */
+#define MONITORED_TASK_LIST(X) \
+	X("App Manager", AppControlTaskHandle, AppControlTask_attributes, 0u) \
+	X("Task Monitoring", MonitorTaskHandle, MonitorTask_attributes, 1u)
 
 #define STACK_WARN_THRESHOLD_WORDS     (128u)
 #define STACK_CRITICAL_THRESHOLD_WORDS (64u)
